@@ -1,121 +1,221 @@
------
+````markdown
+# 🧩 IMMERSIVE BRAND WEBSITE — MASTER IMPLEMENTATION PROMPT (PURE-WEBGL EDITION)
 
-## Expert Creative Technologist Project Specification
+## 🎯 Role & Goal
 
-### 0\) Role
+You are an **expert full-stack front-end developer and creative technologist** specializing in **Three.js / React Three Fiber (R3F)**, **GSAP**, and **high-performance CSS**.  
+Your goal is to design and implement a **museum-like, immersive brand website** that delivers an artistic, story-driven digital experience.
 
-You are an expert full-stack front-end developer & creative technologist (Next.js + TypeScript + Tailwind + Three.js/react-three-fiber + GSAP ScrollTrigger) building a **museum-like, immersive brand website** inspired by a **Radical Italian Design ethos**.
+The result must be:
+- **Pixel-perfect**
+- **Responsive**
+- **High-performance (TTI < 2.5s)**
+- **Accessible**
+- **Purely WebGL** (⚠️ *no 2D fallback mechanisms*)
+- **Error-free** (no dependency, SSR, or type errors)
 
-The result must be **pixel-perfect, performant, and accessible**, featuring **3D/WebGL scrollytelling** that narrates each hero product’s story with cinematic fidelity.
+---
 
------
+## 🧠 Project Overview
 
-### 1\) Project Requirements — Core Technical Rules
+Develop a **scroll-driven 3D narrative site** that feels like a curated design exhibition.  
+Each section unfolds as a cinematic scene revealing one key product or story element.
 
-  * **Stack:** Use Next.js (App Router), TypeScript, Tailwind, react-three-fiber (R3F), @react-three/drei, GSAP ScrollTrigger, and Zustand.
-  * **Build Integrity:** The project must build successfully (`npm run build`) and show **zero dependency, type, or SSR errors**.
-  * **Dependencies:** Do not include any version numbers in `package.json` within the prompt—only ensure cross-package compatibility.
-  * **Code Quality:** ESLint and TypeScript must both pass cleanly (`npm run lint`, `tsc --noEmit`).
+### Core Experience
+- Scroll-triggered storytelling (3D scrollytelling)
+- Cinematic hero scene (interactive 3D object)
+- Timeline-based motion storytelling
+- Product or concept showcase pages with depth and texture
+- Editorial-level visual polish
 
------
+---
 
-### 2\) Inputs to Collect (Assume and Proceed)
+## 🧩 Stack & Build Rules
 
-**If data is missing, generate tasteful placeholder text and assets aligned with a Surreal-Radical Design aesthetic.**
+You may use any compatible modern versions of:
+- **Next.js** (App Router)
+- **TypeScript**
+- **React Three Fiber (R3F)** and **@react-three/drei**
+- **GSAP ScrollTrigger**
+- **Tailwind CSS**
+- **Zustand** for UI state management
 
-| Category | Placeholder Requirement |
-| :--- | :--- |
-| **Brand DNA** | Mission, values, tone (**playful-surreal + craftsmanship-serious**), founding year (e.g., 1960s/70s), 3–5 iconic, highly sculptural products, designer credits, and a short 90-word brand history. |
-| **Visual System** | Primary/neutral palette (dark base), saturated accent colors per product, type stack (display grotesk + humanist body), and a defined spacing scale. |
-| **Assets** | Placeholder 3D meshes (`.GLB`/`DRACO`), product cutouts, 360° sprite sequences, and SVG wordmarks. |
-| **Copy** | Tagline, one-sentence hook, 80–120-word brand paragraph, and per-product teaser/history/material/spec. |
+> You have full freedom over dependencies and versions,  
+> but the project must **build cleanly and error-free** with:
+> - No dependency conflicts  
+> - No SSR or hydration errors  
+> - No TypeScript errors  
+> - No linting errors  
 
------
+### ✅ Required Validation Commands
+```bash
+npm install
+npm run lint
+tsc --noEmit
+npm run build
+````
 
-### 3\) Information Architecture & Experience
+All commands must complete successfully with **no warnings or errors**.
 
-#### Landing Page (Scrollytelling)
+---
 
-  * **Scene 1:** Dark stage, single iconic object, parallax camera dolly on scroll, tagline fade-in.
-  * **Scene 2:** "Radical Since [Year]" timeline scrub (scroll $\rightarrow$ year markers).
-  * **Scene 3+:** One scene per hero product: silhouette $\rightarrow$ color $\rightarrow$ context with micro-interaction on hover.
+## 🧾 Inputs to Collect
 
-#### Key Templates & Navigation
+Gather or generate (if unavailable):
 
-  * **Product Page Template:** Full-bleed gallery, history/authorship, craft/material callouts, spec table, download PDF, related pieces.
-  * **Navigation:** Minimal header, scroll progress indicator, reduced chrome during 3D scenes, sticky "Inquire/Buy" CTA.
+| Category          | Details                                                                                 |
+| ----------------- | --------------------------------------------------------------------------------------- |
+| **Brand DNA**     | Mission, values, tone (artful + technical), founding year, 3–5 core products or stories |
+| **Visual System** | Primary/neutral palette, per-item accent colors, typography, spacing scale              |
+| **Assets**        | 3D models (GLB/DRACO), PNG cutouts, textures, hero videos, SVG logos                    |
+| **Copy**          | Tagline, one-sentence hook, brand paragraph, per-item teaser + materials + specs        |
+| **Legal/SEO**     | Sitemap, robots.txt, OG/Twitter cards, privacy/cookies                                  |
 
------
+> When input data is missing, generate elegant placeholders that fit the brand’s tone and hierarchy.
 
-### 4\) Visual Language
+---
 
-  * **Color:** Dark-neutral base, saturated accents, wide-gamut-safe, **WCAG AA contrast**.
-  * **Typography:** Grotesk display + humanist body; $\ge 8$ pt modular step; tight tracking on headings.
-  * **Imagery:** Cinematic crops; no artificial drop-shadows—only physically motivated light.
-  * **Tokens:** All visual tokens (colors, type, spacing, radii) **must be exported in a `tokens.json`**.
+## 🧭 Information Architecture & Experience Design
 
------
+### Landing (Scroll Scenes 1 → N)
 
-### 5\) Motion & 3D — Engineering Rules
+1. Scene 1: **Dark stage + single iconic 3D object**
 
-  * **Strictly WebGL only.** $\rightarrow$ **No fallback mechanisms** (no image/video substitutes, no parallax alternatives).
-  * **SSR-Safe:** All 3D logic runs client-side only (`"use client"` + `dynamic({ ssr: false })`). Protect all DOM calls behind runtime checks (`if (typeof window !== "undefined")`).
-  * **R3F Discipline:**
-      * Use `useThree`/`useFrame` only inside `<Canvas>`.
-      * For native Three.js objects, render using `<primitive object={...} />`.
-      * Camera control via `useThree().camera` and smooth scroll via GSAP ScrollTrigger.
-  * **Rendering:** `ACESFilmicToneMapping`, `sRGBEncoding`, pixel ratio clamp **$\le 1.5$**, frustum culling enabled.
-  * **Interaction:** GSAP ScrollTrigger drives camera dolly and object animation. Hover = material normal map intensity pulse; subtle wobble amplitude **$\le 0.01$**. Respect `prefers-reduced-motion`.
+   * Parallax camera dolly
+   * Tagline fades in on scroll
+2. Scene 2: **Timeline section**
 
-#### Performance Check
+   * Scroll scrub maps motion across years or phases
+3. Scene 3+:
 
-  * WebGL bundle **$\le 350$ KB gz**.
-  * Mesh **$\le 150$ K tris**.
-  * TTI **$< 2.5$ s** on mid hardware.
+   * Each section highlights one product or story element
+   * Scroll transitions: **silhouette → color → context**
+   * Hover: reveal fine material or surface details
 
------
+### Product / Story Page
 
-### 6\) Accessibility & i18n
+* Full-bleed gallery with parallax depth
+* Story, authorship, materials, specifications
+* Downloadable card (PDF, model, or image)
+* Related pieces section
 
-  * Canvas focusable (`tabindex="0"`), visible focus rings.
-  * ESC pauses motion.
-  * Alt text + ARIA on imagery.
-  * Full support for `prefers-reduced-motion`.
-  * i18n-ready (en/it/ar); RTL-safe components.
+### Other Sections
 
------
+* **About / History:** editorial layout with scroll-pinned clusters
+* **Archive / Index:** grid or masonry filters by type, designer, or year
+* **Navigation:** minimal header, context-aware progress, sticky CTA
 
-### 7\) Engineering & Delivery
+---
 
-  * **Stack:** Next.js (App Router) + TypeScript + Tailwind + GSAP + R3F + Zustand.
-  * **Assets:** Optimized via Next/Image; DRACO/KTX2 compression; prefetch next scene assets when idle.
-  * **SEO:** Structured data (Product, Brand, BreadcrumbList), canonical, descriptive H1/H2s.
+## 🎨 Visual Language
 
------
+* **Color:** deep neutral backgrounds with saturated accents
+* **Typography:**
 
-### 8\) Deliverables
+  * Display → geometric grotesk
+  * Body → humanist sans
+  * Modular type scale (≥8pt step)
+* **Imagery:** cinematic compositions; physically motivated shadows only
+* **Design Tokens:** export color, type, and spacing to `tokens.json`
 
-  * Fully working Next.js site with **one 3D hero scene** + **one complete product page**.
-  * `tokens.json` (colors, type, spacing, radii).
-  * Content model schema (for Products, Designers, Exhibitions, News).
-  * `README` with: Run + build instructions, Performance checklist, Accessibility QA script.
-  * `index.html` demo of the hero scrollytelling (inline CSS + JS, pure WebGL).
+---
 
------
+## ⚙️ Motion & 3D Implementation
 
-### 9\) Output Format (Exact Order)
+### Core Rendering
 
-1.  `index.html` — standalone scrollytelling demo (inline CSS + JS).
-2.  Next.js file tree — concise.
-3.  Key components (`HeroScene.tsx`, `ProductCanvas.tsx`, `Timeline.tsx`).
-4.  `tokens.json` snippet and schema.
-5.  `README` excerpt — build/run + QA checklist.
+* Pure WebGL — no 2D or video fallbacks
+* Use `<Canvas>` from React Three Fiber for all 3D scenes
+* Use `<primitive>` for native Three.js objects (Group, Camera, etc.)
+* Clamp device pixel ratio ≤ 1.5
+* Frustum culling enabled for all meshes
 
------
+### Camera & Lighting
 
-### 10\) Build Validation (Mandatory)
+* Controlled via `useThree().camera`
+* Smooth motion via GSAP ScrollTrigger (ease: `power3.out`)
+* Materials: **StandardMaterial** with environment map
+* Tone Mapping: **ACESFilmicToneMapping**
+* Color Space: **sRGBEncoding**
 
-The output project **must pass all commands cleanly**:
+### Animations
+
+* Scroll-triggered scene transitions
+* Hover → normal map intensity pulse or subtle wobble (≤ 0.01 amplitude)
+* Full support for `prefers-reduced-motion`
+
+### Performance Targets
+
+| Metric         | Target                        |
+| -------------- | ----------------------------- |
+| WebGL Bundle   | ≤ 350 KB gzipped              |
+| Mesh Triangles | ≤ 150K                        |
+| Textures       | ≤ 2K (compressed KTX2/BasisU) |
+| TTI            | < 2.5s on mid-tier hardware   |
+
+---
+
+## ♿ Accessibility & Internationalization
+
+* Canvas elements are focusable (`tabindex="0"`)
+* ESC key pauses animations
+* Visible focus states for keyboard users
+* Alt text and ARIA labels on all non-text elements
+* Support `prefers-reduced-motion`
+* i18n-ready (e.g., EN / IT / AR); RTL layout safe
+
+---
+
+## 🛠️ Engineering & Delivery
+
+* **Framework:** Next.js + TypeScript + Tailwind + GSAP + R3F + Zustand
+* **Asset Pipeline:** Next/Image, compressed 3D assets (DRACO/KTX2), idle prefetch for next scene assets
+* **SEO:** structured schema (`Product`, `Brand`, `BreadcrumbList`), canonical, semantic headings
+* **Analytics:** cookieless by default, optional consent drawer
+* **CI/CD:** GitHub Actions → Vercel with build validation
+
+---
+
+## 📦 Deliverables
+
+1. **Fully functional site**
+
+   * One 3D hero scene + one detailed product/story page
+2. **`tokens.json`** file defining design variables
+3. **Content model schema** (Products, Designers, Stories, etc.)
+4. **README** with:
+
+   * Setup & build guide
+   * Performance checklist
+   * Accessibility QA (keyboard test matrix + contrast validation)
+5. **Standalone `index.html` demo**
+
+   * Inline CSS + JS
+   * Pure WebGL scene for scrollytelling preview
+
+---
+
+## 🧱 Output Structure
+
+1. **`index.html`** — Inline WebGL demo
+2. **Next.js file tree** — clean and concise
+3. **Key components:**
+
+   * `HeroScene.tsx`
+   * `ProductCanvas.tsx`
+   * `Timeline.tsx`
+     Each must be:
+   * Client-only (`"use client"`)
+   * Dynamically imported with `ssr: false`
+   * SSR-safe and type-strict
+4. **`tokens.json`** snippet + content schema
+5. **README excerpt** (build + QA instructions)
+
+---
+
+## ✅ Build Validation (Mandatory)
+
+All the following must pass cleanly before delivery:
 
 ```bash
 npm install
@@ -124,19 +224,67 @@ tsc --noEmit
 npm run build
 ```
 
-**Acceptance Requirement:**
-✅ Zero dependency errors
-✅ Zero TypeScript errors
-✅ Zero SSR/hydration issues
-✅ Successful `next build`
+> **Acceptance:**
+>
+> * ✅ No dependency errors
+> * ✅ No SSR/hydration warnings
+> * ✅ No TypeScript errors
+> * ✅ Successful `next build`
+> * ✅ Lighthouse ≥ 90 (Performance, SEO, Accessibility, PWA)
 
------
+---
 
-### 13\) Content Starter (Generalized)
+## 💡 Quality & Acceptance Criteria
 
-  * **Tagline:** “Radical design, lovingly unreasonable.”
-  * **Brand Paragraph:** 90-word blend of Italian radical design, superior craft, and playful humor.
-  * **Products (for implementation):**
-      * **Iconic Sculpture A (1972):** Playful provocation turned icon.
-      * **Iconic Sculpture B (1970):** Surreal form that defies function.
-      * **Iconic Sculpture C (1971):** A field of rest, unexpectedly large.
+* Visual accuracy within ±3px of design spec
+* 60 FPS on desktop, 30 FPS on mobile
+* Smooth ScrollTrigger animation without frame drops
+* Clean build logs (no warnings or errors)
+* Perfectly modular, maintainable structure
+
+---
+
+## 🚫 Guardrails
+
+**Do:**
+
+* Use dynamic imports with `ssr: false` for all WebGL scenes
+* Guard DOM access with `if (typeof window !== 'undefined')`
+* Clamp DPR ≤ 1.5
+* Lazy-load non-critical assets
+
+**Don’t:**
+
+* Add 2D fallback mechanisms
+* Invoke DOM APIs during SSR
+* Push dependency conflicts or type mismatches
+* Ignore lint/type errors
+
+---
+
+## ✍️ Content Starter (Example)
+
+**Tagline:**
+
+> “Radical design, reimagined for motion.”
+
+**Intro Paragraph:**
+
+> This digital space blends storytelling, craft, and interaction into one seamless visual journey. It celebrates creativity and technology through objects that move, respond, and breathe as you scroll.
+
+**Scene Concepts:**
+
+* **Scene 1:** Abstract sculpture (hero object)
+* **Scene 2:** Interactive timeline section
+* **Scene 3:** Product or concept gallery in motion
+
+---
+
+## 🧩 Final Summary
+
+> **Goal:** Build a high-performance, purely WebGL, scrollytelling brand site.
+> **Constraints:** No fallbacks. No dependency or build errors.
+> **Output:** Next.js + TypeScript + R3F + GSAP project with a validated clean build and fully immersive 3D experience.
+> **Quality Gate:** All lint, type, and build checks must pass before delivery.
+
+---
