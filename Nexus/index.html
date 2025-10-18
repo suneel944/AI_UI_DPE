@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusFlow - Visualize &amp; manage project data</title>
+  <style>
+    /* Import a clean, modern font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    /* Base styles */
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #0d1117;
+      color: #ffffff;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      margin: 0;
+    }
+    p {
+      margin: 0 0 1rem 0;
+    }
+    a {
+      text-decoration: none;
+    }
+    /* Containers */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    section {
+      padding: 4rem 0;
+    }
+    /* Hero section */
+    .hero {
+      position: relative;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: radial-gradient(circle at 50% 50%, #162247, #0d1117);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.2), rgba(13, 17, 23, 0) 70%);
+      filter: blur(100px);
+      animation: pulse 8s infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes pulse {
+      0% {
+        transform: translate(-50%, -40%) scale(1);
+      }
+      100% {
+        transform: translate(-50%, -30%) scale(1.2);
+      }
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #d0d6f0;
+    }
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.6rem;
+      border-radius: 999px;
+      font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(45deg, #8a40e2, #5a2fb8, #e35d5b);
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(138, 64, 226, 0.4);
+    }
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 25px rgba(138, 64, 226, 0.6);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-4px);
+    }
+    /* Feature section on light background */
+    .feature-section {
+      background-color: #f5f5f5;
+      color: #0d1117;
+    }
+    .feature-section h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .feature-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .feature-card.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .feature-card img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #162247;
+    }
+    .feature-card p {
+      color: #4b5563;
+      font-size: 0.95rem;
+    }
+    /* Dark section styles */
+    .dark-section {
+      background-color: #0a0f24;
+      color: #ffffff;
+    }
+    .dark-section h2 {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .dark-section p {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      text-align: center;
+      color: #a1a8c9;
+    }
+    .dark-section .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+    .item-card {
+      background: #131a3a;
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .item-card.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .item-card svg {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 1rem;
+      fill: url(#gradient);
+    }
+    /* Footer */
+    .footer {
+      background: #0d1117;
+      color: #a1a8c9;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .footer h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #e4e9fc;
+    }
+    .footer p {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      color: #8c95c4;
+    }
+    .footer .btn-group {
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-content">
+      <h1>NexusFlow</h1>
+      <p>Visualize, orchestrate, and master your project’s data with AI‑powered clarity.</p>
+      <div class="btn-group">
+        <a href="#" class="btn btn-primary">Get Started</a>
+        <a href="#" class="btn btn-secondary">See Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Section 1 -->
+  <section class="feature-section">
+    <div class="container">
+      <h2>Designed for powerful collaboration</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <img src="https://picsum.photos/400/250?random=1" alt="Data visualization dashboard" />
+          <h3>Unified Dashboard</h3>
+          <p>Gather all your tasks, timelines and discussions in one intuitive overview, with smart filters and AI summaries.</p>
+        </div>
+        <div class="feature-card">
+          <img src="https://picsum.photos/400/250?random=2" alt="Interactive charts" />
+          <h3>Interactive Insights</h3>
+          <p>Let NexusFlow transform raw data into interactive charts and graphs, highlighting what matters most for your team.</p>
+        </div>
+        <div class="feature-card">
+          <img src="https://picsum.photos/400/250?random=3" alt="AI assistant" />
+          <h3>AI‑Driven Suggestions</h3>
+          <p>Our AI assistant analyzes project activity and suggests optimizations, risk alerts and action items before you ask.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dark Section with items -->
+  <section class="dark-section">
+    <div class="container">
+      <h2>Flow smarter, together</h2>
+      <p>NexusFlow gives every teammate a seat at the table. Automate workflows, sync with your favourite tools, and keep everyone in sync with real‑time updates.</p>
+      <div class="items-grid">
+        <div class="item-card">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#8a40e2" />
+                <stop offset="100%" stop-color="#e35d5b" />
+              </linearGradient>
+            </defs>
+            <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a1.5 1.5 0 11.001 3.001A1.5 1.5 0 0112 6zm2 11H10v-1a2 2 0 012-2h0a2 2 0 012 2v1z" />
+          </svg>
+          <h3>Seamless Collaboration</h3>
+          <p>Invite teammates and stakeholders into a single source of truth. Set roles, track progress, and stay aligned.</p>
+        </div>
+        <div class="item-card">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#8a40e2" />
+                <stop offset="100%" stop-color="#e35d5b" />
+              </linearGradient>
+            </defs>
+            <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm-4 10a4 4 0 018 0 4 4 0 01-8 0zm7.55 3.95a6 6 0 00-7.1 0C7.14 17.35 6 19.42 6 22h12c0-2.58-1.14-4.65-2.45-6.05z" fill="url(#gradient2)" />
+          </svg>
+          <h3>Smart Integrations</h3>
+          <p>Connect NexusFlow with GitHub, Slack and your favourite tools to sync data and automate workflows effortlessly.</p>
+        </div>
+        <div class="item-card">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#8a40e2" />
+                <stop offset="100%" stop-color="#e35d5b" />
+              </linearGradient>
+            </defs>
+            <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="url(#gradient3)" />
+          </svg>
+          <h3>Intelligent Notifications</h3>
+          <p>Stay up to date with AI‑curated notifications that surface what’s important and minimize noise.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Section 2 -->
+  <section class="feature-section">
+    <div class="container">
+      <h2>See the big picture</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <img src="https://picsum.photos/400/250?random=4" alt="Timeline view" />
+          <h3>Timeline Management</h3>
+          <p>Visualize dependencies and milestones with interactive timelines and Gantt charts, effortlessly reschedule tasks with drag‑and‑drop.</p>
+        </div>
+        <div class="feature-card">
+          <img src="https://picsum.photos/400/250?random=5" alt="Resource planning" />
+          <h3>Resource Planning</h3>
+          <p>Balance workloads by assigning tasks based on capacity and skill sets. Monitor utilization and adjust plans proactively.</p>
+        </div>
+        <div class="feature-card">
+          <img src="https://picsum.photos/400/250?random=6" alt="Custom reports" />
+          <h3>Custom Reports</h3>
+          <p>Create and share tailored reports with stakeholders. Export data in multiple formats and track key performance indicators.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final dark call-to-action section -->
+  <section class="dark-section">
+    <div class="container">
+      <h2>Join the NexusFlow community</h2>
+      <p>Be among the first to experience the future of project management. Sign up for early access and get exclusive updates.</p>
+      <div class="btn-group">
+        <a href="#" class="btn btn-primary">Request Access</a>
+        <a href="#" class="btn btn-secondary">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <h2>Ready to flow?</h2>
+      <p>Unlock your team’s potential with NexusFlow — the AI‑powered workspace built for collaboration and clarity.</p>
+      <div class="btn-group">
+        <a href="#" class="btn btn-primary">Start Free Trial</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll animations -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.feature-card, .item-card').forEach(el => {
+        observer.observe(el);
+      });
+    });
+  </script>
+</body>
+</html>
